@@ -5,24 +5,28 @@ import random
 def dobas():
     try:
         db = int(dobas_szam.get())
-    except:
-        messagebox.showinfo("Hiba", "Nem számot adott meg!")
+    except ValueError:
+        messagebox.showerror("Hiba", "Nem sikerült számmá átalakítani!!")
+        return
+    if not 1 <= db <= 10000:
+        messagebox.showerror("Hiba", "A dobások számának 1 és 10000 közé kell esnie!")
         return
 
-    eredmenyek = [0] * 7
+    eredmenyek = {i: 0 for i in range(1, 7)}
     for _ in range(db):
-        eredmenyek[random.randint(1, 6)] +=1
-    szoveg =""
-    for i in range(1,7):
-        szoveg += f"{i}. oldal = {eredmenyek[i]}\n"
+        dobott_ertek = random.randint(1, 6)
+        eredmenyek[dobott_ertek] += 1
+
+    szoveg ="\n" .join(f"{oldal}.  =  {darab}" for oldal, darab in eredmenyek.items())
+
     dobas_eredmenye.configure(text=szoveg)
 
 root = tk.Tk()
-root.geometry("600x400")
 root.title("Kockázás")
-root.resizable(False, False)
+root.geometry("600x400")
 
-cim_cimke = ttk.Label(text="Kockajáték", font=("Arial", 14, "bold"))
+
+cim_cimke = ttk.Label(root, text="Kockajáték", font=("Arial", 14, "bold"))
 cim_cimke.grid(column=1, row=0, padx=20, pady=20)
 
 dobas_szam = tk.StringVar(value="10")
